@@ -2,7 +2,7 @@
 
 ## Register User
 
-Creates a new user account in the system.
+Creates a new user account in the system. This endpoint handles user registration with input validation, password hashing, and JWT token generation.
 
 ### Endpoint
 
