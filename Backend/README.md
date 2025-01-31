@@ -91,3 +91,10 @@ Error (400):
   ]
 }
 ```
+
+## Login User
+
+Authenticates an existing user and returns a JWT token.
+
+### Endpoint
+````
