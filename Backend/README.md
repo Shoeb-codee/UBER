@@ -97,4 +97,48 @@ Error (400):
 Authenticates an existing user and returns a JWT token.
 
 ### Endpoint
-````
+
+## Get User Profile
+
+Retrieves the profile information of the authenticated user.
+
+### Endpoint
+
+### Authentication
+Requires a valid JWT token in one of:
+- Cookie named 'token'
+- Authorization header: `Bearer <token>`
+
+### Response Body
+#### Success Response (200)
+| Field          | Type   | Description                               |
+|----------------|--------|-------------------------------------------|
+| _id           | string | Unique identifier for the user            |
+| fullname      | object | Contains firstname and lastname           |
+| email         | string | User's email address                      |
+| socketId      | string | Socket connection ID (if any)             |
+
+### Status Codes
+| Status Code | Description                                |
+|-------------|--------------------------------------------|
+| 200         | Success                                    |
+| 401         | Unauthorized - Invalid or missing token    |
+
+## Logout User
+
+Logs out the current user by invalidating their JWT token.
+
+### Endpoint
+
+### Authentication
+Requires a valid JWT token in one of:
+- Cookie named 'token'
+- Authorization header: `Bearer <token>`
+
+### Response Body
+#### Success Response (200)
+```json
+{
+  "message": "logged out successfully"
+}
+```
