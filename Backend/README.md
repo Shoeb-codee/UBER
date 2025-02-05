@@ -79,13 +79,7 @@ Success (201):
 Error (400):
 ```json
 {
-  "errors": [
-    {
-      "msg": "First name must be atleast 3 characters long",
-      "param": "fullname.firstname"
-    },
-    {
-      "msg": "Invalid Email",
+  ",
       "param": "email"
     }
   ]
@@ -94,7 +88,7 @@ Error (400):
 
 ## Login User
 
-Authenticates an existing user and returns a JWT token.
+Authenticates an existing ususerreturns a JWT token.
 
 ### Endpoint
 
@@ -102,12 +96,8 @@ Authenticates an existing user and returns a JWT token.
 
 Retrieves the profile information of the authenticated user.
 
-### Endpoint
-
-### Authentication
-Requires a valid JWT token in one of:
-- Cookie named 'token'
-- Authorization header: `Bearer <token>`
+### Endpouser`
+POST / Authorization header: `Bearer <token>`
 
 ### Response Body
 #### Success Response (200)
@@ -129,7 +119,9 @@ Requires a valid JWT token in one of:
 Logs out the current user by invalidating their JWT token.
 
 ### Endpoint
-
+```
+POST /users/logout
+```
 ### Authentication
 Requires a valid JWT token in one of:
 - Cookie named 'token'
@@ -142,3 +134,80 @@ Requires a valid JWT token in one of:
   "message": "logged out successfully"
 }
 ```
+
+# Captain API Documentation 
+
+## Register Captain
+
+Creates a new captain account with vehicle details.
+
+### Endpoint
+### Request Body
+
+| Field                | Type   | Required | Validation Rules                    |
+|---------------------|---------|----------|-------------------------------------|
+| fullname.firstname  | string  | Yes      | Minimum 3 characters                |
+| fullname.lastname   | string  | No       | Minimum 3 characters if provided    |
+| email              | string  | Yes      | Valid email format                  |
+| password           | string  | Yes      | Minimum 6 characters                |
+| vehicle.color      | string  | Yes      | Minimum 3 characters                |
+| vehicle.plate      | string  | Yes      | Minimum 3 characters                |
+| vehicle.capacity   | number  | Yes      | Minimum value of 1                  |
+| vehicle.vehicleType| string  | Yes      | Must be: 'car', 'motorcycle', 'Auto'|
+
+### Response Body
+#### Success Response (201)
+| Field             | Type   | Description                               |
+|-------------------|--------|-------------------------------------------|
+| token             | string | JWT authentication token                  |
+| captain._id       | string | Unique identifier for the captain        |
+| captain.fullname  | object | Contains firstname and lastname          |
+| captain.email     | string | Captain's email address                  |
+| captain.vehicle   | object | Vehicle details                          |
+| captain.status    | string | Account status (default: 'inactive')     |
+
+### Validation Rules
+- Email must be valid format and unique
+- First name must be at least 3 characters
+- Password must be at least 6 characters
+- Vehicle color must be at least 3 characters
+- Vehicle plate must be at least 3 characters
+- Vehicle capacity must be 1 or greater
+- Vehicle type must be one of: car, motorcycle, Auto
+
+### Example Request
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Driver"
+  },
+  "email": "john.driver@example.com",
+  "password": "securepass123",
+  "vehicle": {
+    "color": "Black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+### Example Response
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Driver"
+    },
+    "email": "john.driver@example.com",
+    "vehicle": {
+      "color": "Black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive",
+    "_id": "captain_id_here"
+  }
+}
