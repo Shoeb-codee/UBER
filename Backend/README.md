@@ -211,3 +211,89 @@ Creates a new captain account with vehicle details.
     "_id": "captain_id_here"
   }
 }
+```
+## 2. Login Captain
+### Endpoint
+```
+POST /captains/login
+```
+
+### Request Body
+| Field    | Type   | Required | Validation Rules         |
+|----------|--------|----------|-------------------------|
+| email    | string | Yes      | Valid email format      |
+| password | string | Yes      | Minimum 6 characters    |
+
+### Response
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string",
+    "status": "inactive|active",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    }
+  }
+}
+```
+
+## Get Captain Profile
+
+Retrieves the profile information of the authenticated captain.
+
+### Endpoint
+```
+GET /captains/profile
+```
+
+### Authentication
+Requires a valid JWT token in one of:
+- Cookie named 'token'
+- Authorization header: `Bearer <token>`
+
+### Response Body
+#### Success Response (200)
+| Field          | Type   | Description                               |
+|----------------|--------|-------------------------------------------|
+| _id           | string | Unique identifier for the captain         |
+| fullname      | object | Contains firstname and lastname           |
+| email         | string | Captain's email address                   |
+| vehicle       | object | Vehicle details                           |
+| status        | string | Account status                            |
+
+### Status Codes
+| Status Code | Description                                |
+|-------------|--------------------------------------------|
+| 200         | Success                                    |
+| 401         | Unauthorized - Invalid or missing token    |
+
+## Logout Captain
+
+Logs out the current captain by invalidating their JWT token.
+
+### Endpoint
+```
+GET /captains/logout
+```
+
+### Authentication
+Requires a valid JWT token in one of:
+- Cookie named 'token'
+- Authorization header: `Bearer <token>`
+
+### Response Body
+#### Success Response (200)
+```json
+{
+  "message": "logged out successfully"
+}
+```
