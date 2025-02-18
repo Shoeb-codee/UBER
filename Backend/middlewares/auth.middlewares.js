@@ -42,7 +42,6 @@ module.exports.authCaptain = async (req,res,next)=>{
       req.headers.authorization.startsWith("Bearer ")
       ? req.headers.authorization.split(" ")[1]
       : null);
-console.log(token)
   if(!token){
     return res.status(401).json({message: "Unauthorized"})
   }

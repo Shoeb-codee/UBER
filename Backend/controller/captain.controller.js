@@ -67,9 +67,13 @@ module.exports.getCaptainProfile = async (req, res, next)=>{
 
 module.exports.logoutCaptain = async (req, res, next)=>{
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-  await blacklistTokenModel.create({token});
-
-
+  if (!token) {
+    return res.status(401).json({ message: "No token provided" });
+  }
+  const existingToken = await blacklistTokenModel.findOne({ token });
+  if (!existingToken) {
+    await blacklistTokenModel.create({ token });
+  }
   res.clearCookie('token');
 
   res.status(200).json({message:"Logged out successfully"});
