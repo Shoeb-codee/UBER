@@ -1,29 +1,30 @@
 import React from 'react'
 
-const LocationSearchPanel = (props) => {
-  const locations = [
-    "24B, Near Kapoor's cafe, Sheryians Coding School. ",
-    "12D, Near Burger Junction cafe, Ibad Complex. ",
-    "4033A, Purani Building , Naya Mohalla School. ",
-    "B-12, Near Kapoor's cafe, Sheryians Coding School. "
-  ]
+const LocationSearchPanel = ({ suggestions, setvehiclePanel, setpanelOpen, setpickup, setdestination, activeField }) => {
+
+  const handleSuggestionClick = (suggestion) => {
+    if (activeField === 'pickup') {
+      setpickup(suggestion);
+    } else {
+      setdestination(suggestion);
+    }
+    // setvehiclePanel(true);
+    // setpanelOpen(false);
+  };
+
   return (
     <div>
-      {/* This is just a sample data  */}
-      {
-        locations.map((elem,idx)=>{
-          return <div key={idx} onClick={()=>{
-            props.setvehiclePanel(true);
-            props.setpanelOpen(false);
-          }} className='flex gap-4 items-center justify-start my-4 rounded-xl p-2 border-2 border-gray-100 active:border-black'>
-          <h2 className='bg-[#eee] flex items-center justify-center h-8 w-12 rounded-full'><i className="ri-map-pin-fill"></i></h2>
-          <h4 className='font-medium'>{elem}</h4>
-        </div>
-        })
-      }
+    {/* Display fetched suggestions */}
+    {
+        suggestions.map((elem, idx) => (
+            <div key={idx} onClick={() => handleSuggestionClick(elem)} className='flex gap-4 border-2 p-3 border-gray-50 active:border-black rounded-xl items-center my-2 justify-start'>
+                <h2 className='bg-[#eee] h-8 flex items-center justify-center w-12 rounded-full'><i className="ri-map-pin-fill"></i></h2>
+                <h4 className='font-medium'>{elem}</h4>
+            </div>
+        ))
+    }
+</div>
+  );
+};
 
-    </div>
-  )
-}
-
-export default LocationSearchPanel
+export default LocationSearchPanel;

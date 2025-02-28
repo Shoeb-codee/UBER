@@ -79,8 +79,11 @@ Success (201):
 Error (400):
 ```json
 {
-  ",
-      "param": "email"
+  "errors": [
+    {
+      "msg": "Invalid origin address",
+      "param": "origin",
+      "location": "query"
     }
   ]
 }
@@ -297,3 +300,227 @@ Requires a valid JWT token in one of:
   "message": "logged out successfully"
 }
 ```
+
+## Get Coordinates
+
+Retrieves the coordinates (latitude and longitude) for a given address.
+
+### Endpoint
+```
+GET /coordinates
+```
+
+### Request Parameters
+| Parameter | Type   | Required | Description                |
+|-----------|--------|----------|----------------------------|
+| address   | string | Yes      | The address to geocode     |
+
+### Response Body
+#### Success Response (200)
+| Field     | Type    | Description                |
+|-----------|---------|----------------------------|
+| latitude  | number  | Latitude of the address    |
+| longitude | number  | Longitude of the address   |
+
+### Status Codes
+| Status Code | Description                                |
+|-------------|--------------------------------------------|
+| 200         | Success                                    |
+| 400         | Bad Request - Invalid address              |
+| 500         | Internal Server Error                      |
+
+### Example Request
+```json
+{
+  "address": "1600 Amphitheatre Parkway, Mountain View, CA"
+}
+```
+
+### Example Response
+Success (200):
+```json
+{
+  "latitude": 37.4224764,
+  "longitude": -122.0842499
+}
+```
+
+Error (400):
+```json
+{
+  "error": "Invalid address"
+}
+```
+
+## Get Distance and Time
+
+Retrieves the distance and estimated travel time between two locations.
+
+### Endpoint
+```
+GET /maps/get-distance-time
+```
+
+### Request Body
+```json
+{
+  "pickup": "123 Main St",
+  "destination": "456 Elm St"
+}
+```
+
+### Example Response
+Success (200):
+```json
+{
+  "distance": {
+    "value": 5000,
+    "text": "5 km"
+  },
+  "duration": {
+    "value": 600,
+    "text": "10 mins"
+  }
+}
+```
+
+Error (400):
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid pickup address",
+      "param": "pickup",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Get Suggestions
+
+Retrieves suggestions for a given query.
+
+### Endpoint
+```
+GET /maps/get-suggestions
+```
+
+### Request Body
+```json
+{
+  "input": "123 Main"
+}
+```
+
+### Example Response
+Success (200):
+```json
+[
+  "123 Main St, San Francisco, CA",
+  "123 Main St, Los Angeles, CA"
+]
+```
+
+Error (400):
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid input",
+      "param": "input",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Create Ride
+
+Creates a new ride request.
+
+### Endpoint
+```
+POST /rides/create
+```
+
+### Request Body
+| Field        | Type   | Required | Validation Rules         |
+|--------------|--------|----------|--------------------------|
+| origin       | string | Yes      | Valid address format     |
+| destination  | string | Yes      | Valid address format     |
+| passengerId  | string | Yes      | Valid passenger ID       |
+| captainId    | string | Yes      | Valid captain ID         |
+
+### Response Body
+#### Success Response (201)
+| Field        | Type   | Description                               |
+|--------------|--------|-------------------------------------------|
+| rideId       | string | Unique identifier for the ride            |
+| origin       | string | Origin address                            |
+| destination  | string | Destination address                       |
+| passengerId  | string | Unique identifier for the passenger       |
+| captainId    | string | Unique identifier for the captain         |
+| status       | string | Ride status (e.g., 'requested', 'ongoing')|
+
+### Status Codes
+| Status Code | Description                                |
+|-------------|--------------------------------------------|
+| 201         | Ride successfully created                  |
+| 400         | Validation errors                          |
+| 500         | Internal Server Error                      |
+
+### Example Request
+```json
+{
+  "origin": "123 Main St",
+  "destination": "456 Elm St",
+  "passengerId": "passenger_id_here",
+  "captainId": "captain_id_here"
+}
+```
+
+### Example Response
+Success (201):
+```json
+{
+  "rideId": "ride_id_here",
+  "origin": "123 Main St",
+  "destination": "456 Elm St",
+  "passengerId": "passenger_id_here",
+  "captainId": "captain_id_here",
+  "status": "requested"
+}
+```
+
+Error (400):
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid origin address",
+      "param": "origin",
+      "location": "body"
+    }
+  ]
+}
+```
+
+## Get Fare
+
+Retrieves the fare estimate for a ride.
+
+### Endpoint
+```
+GET /rides/get-fare
+```
+
+### Response Body
+```json
+{
+  "Auto": 50,
+  "car": 75,
+  "moto": 40
+}
+```
+
